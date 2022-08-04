@@ -6,7 +6,15 @@ from tkinter import messagebox
 # Main Screen
 master = Tk()
 master.title('David\'s Banking App')
+master.geometry("400x500")
 master.resizable(False, False)
+
+# Image import
+main_img = Image.open('Images/Pig_Pic.png')
+main_img = ImageTk.PhotoImage(main_img)
+
+background_image = Image.open('Images/Digital-Transformation-in-Banking-Cover.jpg')
+background_image = ImageTk.PhotoImage(background_image)
 
 
 # Creating Functions
@@ -118,21 +126,33 @@ def login():
     # Login screen
     login_screen = Toplevel(master)
     login_screen.title("Login")
+    login_screen.geometry("300x150")
+    # login_screen.resizable(False, False)
+
+    # Frame
+    Login_title_frame = Frame(login_screen, bg='black', bd=2)
+    background_frame_1 = Frame(login_screen)
+    # Place Frame
+    Login_title_frame.place(relx=0.5, rely=0.05, relwidth=0.5, relheight=0.2, anchor='n')
+    background_frame_1.place(relheight=1, relwidth=1)
+
 
     # Labels
-    Label(login_screen, text="Login to your account:", font=('Calibri', 12)).grid(row=0, sticky=N, pady=10)
-    Label(login_screen, text="Username:", font=('Calibri', 12)).grid(row=1, sticky=W)
-    Label(login_screen, text="Password:", font=('Calibri', 12)).grid(row=2, sticky=W)
-    login_notif = Label(login_screen, font=("Calibri", 12))
-    login_notif.grid(row=4, sticky=N)
-
-    # Entry
-    Entry(login_screen, textvariable=temp_login_username).grid(row=1, column=1, padx=5)
-    Entry(login_screen, textvariable=temp_login_password, show='*').grid(row=2, column=1, padx=5)
-
-    # Button
-    Button(login_screen, text='Login', command=login_session, width=15, font=('Calibri', 12)).grid(row=3, sticky=W,
-                                                                                                   pady=5, padx=5)
+    Label(background_frame_1, image=background_image).place(relwidth=1, relheight=1)
+    Label(Login_title_frame, text="Login to your account:", font=('Calibri', 12), bg='#659EDB').place(relheight=1,
+                                                                                                      relwidth=1)
+    # Label(login_screen, text="Username:", font=('Calibri', 12)).grid(row=1, sticky=W)
+    # Label(login_screen, text="Password:", font=('Calibri', 12)).grid(row=2, sticky=W)
+    # login_notif = Label(login_screen, font=("Calibri", 12))
+    # login_notif.grid(row=4, sticky=N)
+    #
+    # # Entry
+    # Entry(login_screen, textvariable=temp_login_username).grid(row=1, column=1, padx=5)
+    # Entry(login_screen, textvariable=temp_login_password, show='*').grid(row=2, column=1, padx=5)
+    #
+    # # Button
+    # Button(login_screen, text='Login', command=login_session, width=15, font=('Calibri', 12)).grid(row=3, sticky=W,
+    #                                                                                                pady=5, padx=5)
 
 
 def login_session():
@@ -433,28 +453,18 @@ def finish_edit_details():
         notif.config(fg="green", text="Account details appended succesfully!")
 
 
-master.geometry("400x500")
-
-# Image import
-main_img = Image.open('Images/Pig_Pic.png')
-# main_img = main_img.resize((150, 150))
-main_img = ImageTk.PhotoImage(main_img)
-
-background_image = Image.open('Images/Digital-Transformation-in-Banking-Cover.jpg')
-background_image = ImageTk.PhotoImage(background_image)
-
 # Frame
 background_frame = Frame(master)
-title_frame = Frame(master, bg='#A5ABA2', bd=2)
-subtitle_frame = Frame(master, bg='#A5ABA2', bd=2)
-register_frame = Frame(master, bg='#A5ABA2', bd=5)
-login_frame = Frame(master, bg='#A5ABA2', bd=5)
-pig_pic_frame = Frame(master, bg='#A5ABA2', bd=5)
+title_frame = Frame(master, bg='black', bd=2)
+subtitle_frame = Frame(master, bg='black', bd=3)
+register_frame = Frame(master, bg='black', bd=5)
+login_frame = Frame(master, bg='black', bd=5)
+pig_pic_frame = Frame(master, bg='black', bd=2)
 
 # Placing Frames
 background_frame.place(relheight=1, relwidth=1)
 title_frame.place(relx=0.5, rely=0.05, relwidth=0.6, relheight=0.06, anchor='n')
-subtitle_frame.place(relx=0.5, rely=0.12, relwidth=0.52, relheight=0.06, anchor='n')
+subtitle_frame.place(relx=0.5, rely=0.12, relwidth=0.6, relheight=0.06, anchor='n')
 register_frame.place(relx=0.5, rely=0.7, relwidth=0.5, relheight=0.1, anchor='n')
 login_frame.place(relx=0.5, rely=0.81, relwidth=0.5, relheight=0.1, anchor='n')
 pig_pic_frame.place(relx=0.5, rely=0.2, relwidth=0.5, relheight=0.4, anchor='n')
@@ -467,7 +477,7 @@ Label(title_frame, text="Lothian Trust Banking Beta", font=('Calibri', 14, 'bold
                                                                                                         relheight=1)
 Label(subtitle_frame, text="Banking has never felt easier!", bg='#659EDB', font=('Calibri', 12, 'bold')).place(
     relwidth=1, relheight=1)
-Label(pig_pic_frame, image=main_img, bg='black').place(relwidth=1, relheight=1)
+Label(pig_pic_frame, image=main_img, bg='#062C63').place(relwidth=1, relheight=1)
 Label(background_frame, image=background_image).place(relwidth=1, relheight=1)
 
 # Buttons
