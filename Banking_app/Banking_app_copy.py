@@ -130,16 +130,15 @@ def login():
     # login_screen.resizable(False, False)
 
     # Frame
-    background_frame_1 = Frame(login_screen)
-    Login_title_frame = Frame(background_frame_1, bg='black', bd=2)
+    background_frame_1 = Frame(login_screen, bg='black')
+    Login_title_frame = Frame(login_screen, bg='black', bd=2)
 
     # Place Frame
     Login_title_frame.place(relx=0.5, rely=0.05, relwidth=0.5, relheight=0.2, anchor='n')
     background_frame_1.place(relheight=1, relwidth=1)
 
-
     # Labels
-    Label(background_frame_1, image=background_image).place(relwidth=1, relheight=1)
+    # Label(login_screen, image=background_image).place(relwidth=1, relheight=1)
     Label(Login_title_frame, text="Login to your account:", font=('Calibri', 12), bg='#659EDB').place(relheight=1,
                                                                                                       relwidth=1)
     # Label(login_screen, text="Username:", font=('Calibri', 12)).grid(row=1, sticky=W)
