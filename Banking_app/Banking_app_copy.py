@@ -48,6 +48,7 @@ def register():
     if response == "yes":
         register_screen = Toplevel(master)
         register_screen.title("Register")
+        register_screen.transient(master)
 
         # Labels
         Label(register_screen, text="Please enter your details below to register:", font=("Calibri", 14)).grid(row=0,
@@ -97,7 +98,7 @@ def finish_reg():
         messagebox.showerror("Error!", "All fields not filled in *")
         return
 
-    # Checking if account exists
+        # Checking if account exists
     for name_check in all_accounts:
         if username == name_check:
             notif.config(fg="red", text="Account already exists")
@@ -126,33 +127,39 @@ def login():
     # Login screen
     login_screen = Toplevel(master)
     login_screen.title("Login")
-    login_screen.geometry("300x150")
-    # login_screen.resizable(False, False)
+    login_screen.geometry("350x200")
+    login_screen.resizable(False, False)
+    login_screen.transient(master)
 
     # Frame
     background_frame_1 = Frame(login_screen, bg='black')
     Login_title_frame = Frame(login_screen, bg='black', bd=2)
+    username_frame = Frame(login_screen, bg='black', bd=2)
+    entry_frame = Frame(login_screen, bg='black', bd=2)
+    Login_button_frame = Frame(login_screen, bg='black', bd=2)
 
     # Place Frame
     Login_title_frame.place(relx=0.5, rely=0.05, relwidth=0.5, relheight=0.2, anchor='n')
     background_frame_1.place(relheight=1, relwidth=1)
+    username_frame.place(relx=0.02, rely=0.32, relwidth=0.4, relheight=0.5)
+    entry_frame.place(relx=0.45, rely=0.32, relwidth=0.5, relheight=0.5)
+    Login_button_frame.place(relx=0.02, rely=0.82, relheight=0.15, relwidth=0.4)
 
     # Labels
-    # Label(login_screen, image=background_image).place(relwidth=1, relheight=1)
+    Label(background_frame_1, image=background_image).place(relwidth=1, relheight=1)
     Label(Login_title_frame, text="Login to your account:", font=('Calibri', 12), bg='#659EDB').place(relheight=1,
                                                                                                       relwidth=1)
-    # Label(login_screen, text="Username:", font=('Calibri', 12)).grid(row=1, sticky=W)
-    # Label(login_screen, text="Password:", font=('Calibri', 12)).grid(row=2, sticky=W)
-    # login_notif = Label(login_screen, font=("Calibri", 12))
-    # login_notif.grid(row=4, sticky=N)
-    #
-    # # Entry
-    # Entry(login_screen, textvariable=temp_login_username).grid(row=1, column=1, padx=5)
-    # Entry(login_screen, textvariable=temp_login_password, show='*').grid(row=2, column=1, padx=5)
-    #
-    # # Button
-    # Button(login_screen, text='Login', command=login_session, width=15, font=('Calibri', 12)).grid(row=3, sticky=W,
-    #                                                                                                pady=5, padx=5)
+    Label(username_frame, text="Username:", font=('Calibri', 12), bg='#659EDB').place(relheight=0.5, relwidth=1)
+    Label(username_frame, text="Password:", font=('Calibri', 12), bg='#659EDB').place(relheight=0.5, relwidth=1, rely=0.5)
+    # login_notif = Label(login_screen, font=("Calibri", 12), bg='black')
+    # login_notif.place(relx=0.45, rely=0.92, relwidth=0.5, anchor='w')
+
+    # Entry
+    Entry(entry_frame, textvariable=temp_login_username, bg='#659EDB').place(relheight=0.5, relwidth=1)
+    Entry(entry_frame, textvariable=temp_login_password, show='*', bg='#659EDB').place(relheight=0.5, relwidth=1, rely=0.5)
+
+    # Button
+    Button(Login_button_frame, text='Login', command=login_session, width=15, font=('Calibri', 12), bg='#659EDB').place(relwidth=1, relheight=1)
 
 
 def login_session():
@@ -190,9 +197,9 @@ def login_session():
                 Label(account_dashboard).grid(row=5, sticky=N, pady=10)
                 return
             else:
-                login_notif.config(fg="red", text="Password Incorrect!")
+                messagebox.showerror("Error!", "Password Incorrect")
                 return
-    login_notif.config(fg="red", text="No account found!")
+    messagebox.showerror("Error!", "No Account Found!")
 
 
 def deposit():
@@ -406,6 +413,7 @@ def finish_edit_details():
     global login_username
     # Vars
     all_accounts = os.listdir()
+    Taken = True
 
     # Opening File
     if new_username.get() == "" or new_password.get() == "":
@@ -415,42 +423,48 @@ def finish_edit_details():
         notif.config(fg="red", text="Error please click the entry screen")
         return
 
-    elif new_username.get() == login_username:
+    # elif new_username.get() == login_username:
+    #     with open(str(login_username), "r") as f:
+    #         file_data = f.readlines()
+    #
+    #     file_data[0] = str(new_username.get()) + '\n'
+    #     file_data[1] = str(new_password.get()) + '\n'
+    #
+    #     with open(str(login_username), "w") as f:
+    #         f.writelines(file_data)
+    #
+    #     notif.config(fg="green", text="Account details appended succesfully!")
+    #     return
+
+    else:
+        for name_check in all_accounts:
+            print(all_accounts)
+            print(new_username.get())
+            if new_username.get() == name_check:
+                # print(name_check)
+                notif.config(fg="red", text="Username already taken")
+                Taken = False
+                break
+            else:
+                continue
+
+    if Taken == True:
         with open(str(login_username), "r") as f:
             file_data = f.readlines()
 
         file_data[0] = str(new_username.get()) + '\n'
         file_data[1] = str(new_password.get()) + '\n'
 
-        with open(str(login_username), "w") as f:
+        with open(str(new_username.get()), 'w') as f:
             f.writelines(file_data)
+            os.remove(login_username)
+            login_username = new_username.get()
 
+        personal_details_screen.destroy()
         notif.config(fg="green", text="Account details appended succesfully!")
-        return
 
-    else:
-        for name_check in all_accounts:
-            print(new_username.get())
 
-            if new_username == name_check:
-                notif.config(fg="red", text="Username already taken")
-                return
-            if str(new_username.get()) and str(new_password.get()) != "":
-                with open(str(login_username), "r") as f:
-                    file_data = f.readlines()
 
-                file_data[0] = str(new_username.get()) + '\n'
-                file_data[1] = str(new_password.get()) + '\n'
-
-                with open(str(new_username.get()), 'w') as f:
-                    f.writelines(file_data)
-                    os.remove(login_username)
-                    login_username = new_username.get()
-
-                personal_details_screen.destroy()
-                break
-
-        notif.config(fg="green", text="Account details appended succesfully!")
 
 
 # Frame
