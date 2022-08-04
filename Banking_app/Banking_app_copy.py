@@ -130,8 +130,9 @@ def login():
     # login_screen.resizable(False, False)
 
     # Frame
-    Login_title_frame = Frame(login_screen, bg='black', bd=2)
     background_frame_1 = Frame(login_screen)
+    Login_title_frame = Frame(background_frame_1, bg='black', bd=2)
+
     # Place Frame
     Login_title_frame.place(relx=0.5, rely=0.05, relwidth=0.5, relheight=0.2, anchor='n')
     background_frame_1.place(relheight=1, relwidth=1)
