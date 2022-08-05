@@ -54,7 +54,7 @@ def register():
     # Register Screen
     response = messagebox.askquestion("Terms & Conditions", "Click Yes or No to agree to our Terms and Conditions")
     if response == "yes":
-        register_screen = Toplevel(master)
+        register_screen = Toplevel()
         register_screen.title("Register")
         register_screen.transient(master)
         register_screen.geometry("450x400")
@@ -103,15 +103,20 @@ def register():
 
         # Buttons
         register_button_1 = Button(register_button_frame, text="Register", command=finish_reg, font=("Calibri", 12),
-                                   bg='#659EDB')
+                                   bg='#659EDB', activebackground="#9EA3AB")
         register_button_1.pack(fill=BOTH, expand=True)
+
+        back_button_register = Button(register_screen, text="<<", command=register_screen.destroy, font=("Calibri", 12),
+                                      bg='#659EDB', activebackground="#9EA3AB")
+
+        back_button_register.place(relx=0.03, rely=0.95, relwidth=0.05, relheight=0.05, anchor='n')
 
         # Binding Buttons
         register_button_1.bind('<Enter>', on_enter)
         register_button_1.bind('<Leave>', on_leave)
 
     else:
-        master.destroy()
+        messagebox.showerror("Terms & Conditions", "Sorry you need to agree to our Terms and Conditions to Register.")
 
 
 def finish_reg():
@@ -147,6 +152,7 @@ def finish_reg():
             f.write('0')
 
         response = messagebox.showinfo('Success!', 'Successfully made Account!')
+        register_screen.destroy()
 
 
 def login():
@@ -196,7 +202,7 @@ def login():
 
     # Button
     login_button_1 = Button(Login_button_frame, text='Login', command=login_session, width=15, font=('Calibri', 12),
-                            bg='#659EDB')
+                            bg='#659EDB', activebackground="#9EA3AB")
     login_button_1.place(relwidth=1, relheight=1)
 
     # Binding Buttons
@@ -250,15 +256,23 @@ def login_session():
                 # Establishing Buttons
                 personal_details_button = Button(dashboard_button_frame, text="Personal Details", font=("Calibri", 12),
                                                  bg='#659EDB', width=30,
-                                                 command=personal_details)
+                                                 command=personal_details, activebackground="#9EA3AB")
+
                 deposit_button = Button(dashboard_button_frame, text="Deposit", font=("Calibri", 12), bg='#659EDB',
-                                        width=30, command=deposit)
+                                        width=30, command=deposit, activebackground="#9EA3AB")
+
                 withdraw_button = Button(dashboard_button_frame, text="Withdraw", font=("Calibri", 12), bg='#659EDB',
-                                         width=30, command=withdraw)
+                                         width=30, command=withdraw, activebackground="#9EA3AB")
+
                 pay_button = Button(dashboard_button_frame, text="Pay Beneficiary", font=("Calibri", 12), bg='#659EDB',
-                                    width=30, command=pay)
+                                    width=30, command=pay, activebackground="#9EA3AB")
+
+                back_button_dashboard = Button(account_dashboard, text="Logout", command=account_dashboard.destroy,
+                                               font=("Calibri", 12),
+                                               bg='#659EDB', activebackground="#9EA3AB")
 
                 # Placing Buttons
+                back_button_dashboard.place(relx=0.03, rely=0.95, relwidth=0.2, relheight=0.07, anchor='w')
                 personal_details_button.pack(fill=BOTH, expand=True)
                 deposit_button.pack(fill=BOTH, expand=True)
                 withdraw_button.pack(fill=BOTH, expand=True)
@@ -420,36 +434,42 @@ def personal_details():
     personal_details_screen.geometry("250x350")
 
     # Establishing Frame
-    personal_details_title = Frame(personal_details_screen, bg='black', bd=5)
-    personal_details_contents = Frame(personal_details_screen, bg='black', bd=2)
     personal_details_background = Frame(personal_details_screen)
+    personal_details_title = Frame(personal_details_screen, bg='black', bd=2)
+    personal_details_contents = Frame(personal_details_screen, bg='black', bd=2)
     personal_details_button = Frame(personal_details_screen, bg='black', bd=2)
 
     # Placing Frames
     personal_details_background.place(relheight=1, relwidth=1)
     personal_details_title.place(relx=0.5, rely=0.05, relwidth=0.6, relheight=0.1, anchor='n')
     personal_details_contents.place(relx=0.5, rely=0.16, relwidth=0.7, relheight=0.7, anchor='n')
-    personal_details_button.place(relx=0.1, rely=0.8, relheight=0.1, relwidth=0.1)
-
-
+    personal_details_button.place(relx=0.5, rely=0.88, relheight=0.1, relwidth=0.4, anchor='n')
 
     # Labels
     Label(personal_details_background, image=background_image).place(relwidth=1, relheight=1)
 
-    Label(personal_details_title, text="Personal Details", font=("Calibri", 14)).pack(fill=BOTH, expand=True)
+    Label(personal_details_title, text="Personal Details", font=("Calibri", 14), bg='#659EDB').pack(fill=BOTH,
+                                                                                                    expand=True)
 
-    Label(personal_details_contents, text="Username : " + login_username, font=("Calibri", 12)).pack(fill=BOTH, expand=True)
+    Label(personal_details_contents, text="Username : " + login_username, font=("Calibri", 12), bg='#659EDB').pack(
+        fill=BOTH, expand=True)
 
-    Label(personal_details_contents, text="Name : " + details_full_name, font=("Calibri", 12)).pack(fill=BOTH, expand=True)
+    Label(personal_details_contents, text="Name : " + details_full_name, font=("Calibri", 12), bg='#659EDB').pack(
+        fill=BOTH, expand=True)
 
-    Label(personal_details_contents, text="Age : " + details_age, font=("Calibri", 12)).pack(fill=BOTH, expand=True)
+    Label(personal_details_contents, text="Age : " + details_age, font=("Calibri", 12), bg='#659EDB').pack(fill=BOTH,
+                                                                                                           expand=True)
 
-    Label(personal_details_contents, text="Gender : " + details_gender, font=("Calibri", 12)).pack(fill=BOTH, expand=True)
+    Label(personal_details_contents, text="Gender : " + details_gender, font=("Calibri", 12), bg='#659EDB').pack(
+        fill=BOTH, expand=True)
 
-    Label(personal_details_contents, text="Balance : R" + details_balance, font=("Calibri", 12)).pack(fill=BOTH, expand=True)
+    Label(personal_details_contents, text="Balance : R" + details_balance, font=("Calibri", 12), bg='#659EDB').pack(
+        fill=BOTH, expand=True)
 
     # Establishing Button
-    edit_details_button = Button(personal_details_button, text="Edit Profile", font=("Calibri", 12), command=edit_details)
+    edit_details_button = Button(personal_details_button, text="Edit Profile", font=("Calibri", 12),
+                                 command=edit_details, bg='#659EDB'
+                                 , activebackground="#9EA3AB")
 
     # Placing Button
     edit_details_button.pack(fill=BOTH, expand=True)
@@ -484,22 +504,41 @@ def edit_details():
     # Personal details Edit Screen
     edit_details_screen = Toplevel(master)
     edit_details_screen.title("Edit Details")
+    edit_details_screen.geometry("350x200")
+    edit_details_screen.transient(master)
+
+    # Frame
+    background_frame_edit_details = Frame(edit_details_screen)
+    title_frame_edit_details = Frame(edit_details_screen, bg='black', bd=2)
+    entry_frame_edit_details = Frame(edit_details_screen, bg='black', bd=2)
+    label_frame_edit_details = Frame(edit_details_screen, bg='black', bd=2)
+    button_frame_edit_details = Frame(edit_details_screen, bg='black', bd=2)
+
+    # Placing Frames
+    background_frame_edit_details.place(relheight=1, relwidth=1)
+    title_frame_edit_details.place(relx=0.5, rely=0.05, relwidth=0.6, relheight=0.15, anchor='n')
+    label_frame_edit_details.place(relx=0.02, rely=0.22, relheight=0.55, relwidth=0.45)
+    entry_frame_edit_details.place(relx=0.5, rely=0.22, relheight=0.55, relwidth=0.48)
+    button_frame_edit_details.place(relx=0.02, rely=0.8, relheight=0.2, relwidth=0.2)
 
     # Label
-    Label(edit_details_screen, text="Personal Details:", font=("Calibri", 14)).grid(row=0, sticky=N, pady=10)
-    Label(edit_details_screen, text="Username : " + details_username, font=("Calibri", 12)).grid(row=1, sticky=W,
-                                                                                                 pady=10)
-    Label(edit_details_screen, text="Password : " + "*******", font=("Calibri", 12)).grid(row=2, sticky=W, pady=10)
-    notif = Label(edit_details_screen, font=("Calibri", 12))
-    notif.grid(row=3, column=1, sticky=N, pady=10)
+    Label(background_frame_edit_details, image=background_image).place(relwidth=1, relheight=1)
+    Label(title_frame_edit_details, text="Personal Details:", font=("Calibri", 14), bg='#659EDB').pack(fill=BOTH,
+                                                                                                       expand=True)
+    Label(label_frame_edit_details, text="Username : " + details_username, font=("Calibri", 12), bg='#659EDB').pack(
+        fill=BOTH, expand=True)
+    Label(label_frame_edit_details, text="Password : " + "*******", font=("Calibri", 12), bg='#659EDB').pack(fill=BOTH,
+                                                                                                             expand=True)
+    # notif = Label(edit_details_screen, font=("Calibri", 12))
+    # notif.grid(row=3, column=1, sticky=N, pady=10)
 
     # Entries
-    username_entry = Entry(edit_details_screen, textvariable=new_username, width=25)
-    password_entry = Entry(edit_details_screen, textvariable=new_password, width=25)
+    username_entry = Entry(entry_frame_edit_details, textvariable=new_username, width=25, bg='#659EDB')
+    password_entry = Entry(entry_frame_edit_details, textvariable=new_password, width=25, bg='#659EDB')
 
     # Placing Entries
-    username_entry.grid(row=1, column=1, columnspan=2)
-    password_entry.grid(row=2, column=1, columnspan=2)
+    username_entry.pack(fill=BOTH, expand=True)
+    password_entry.pack(fill=BOTH, expand=True)
 
     # Insert into entries
     username_entry.insert(END, "Enter new Name here:", )
@@ -510,35 +549,25 @@ def edit_details():
     password_entry.bind("<FocusIn>", temp_text_password)
 
     # Button
-    Button(edit_details_screen, text='Save', command=finish_edit_details).grid(row=3, column=0, pady=10, padx=5)
+    Button(button_frame_edit_details, text='Save', command=finish_edit_details, activebackground="#9EA3AB",
+           bg='#659EDB').pack(fill=BOTH, expand=True)
 
 
 def finish_edit_details():
     global login_username
     # Vars
     all_accounts = os.listdir()
-    Taken = True
+
+    Taken = False
 
     # Opening File
     if new_username.get() == "" or new_password.get() == "":
-        notif.config(fg="red", text="All fields required * ")
-        return
-    elif new_username.get() == "Enter new Name here:" or new_password.get() == "Enter new Password here:":
-        notif.config(fg="red", text="Error please click the entry screen")
+        messagebox.showerror("Error!", "All fields required *")
         return
 
-    # elif new_username.get() == login_username:
-    #     with open(str(login_username), "r") as f:
-    #         file_data = f.readlines()
-    #
-    #     file_data[0] = str(new_username.get()) + '\n'
-    #     file_data[1] = str(new_password.get()) + '\n'
-    #
-    #     with open(str(login_username), "w") as f:
-    #         f.writelines(file_data)
-    #
-    #     notif.config(fg="green", text="Account details appended succesfully!")
-    #     return
+    elif new_username.get() == "Enter new Name here:" or new_password.get() == "Enter new Password here:":
+        messagebox.showerror("Error!", "Error please click the entry screen!")
+        return
 
     else:
         for name_check in all_accounts:
@@ -546,13 +575,13 @@ def finish_edit_details():
             print(new_username.get())
             if new_username.get() == name_check:
                 # print(name_check)
-                notif.config(fg="red", text="Username already taken")
-                Taken = False
+                messagebox.showerror("Error!", "Username already taken")
+                Taken = True
                 break
             else:
                 continue
 
-    if Taken == True:
+    if not Taken:
         with open(str(login_username), "r") as f:
             file_data = f.readlines()
 
@@ -564,8 +593,9 @@ def finish_edit_details():
             os.remove(login_username)
             login_username = new_username.get()
 
+        messagebox.showinfo("Success!", "Account details append successfully!")
         personal_details_screen.destroy()
-        notif.config(fg="green", text="Account details appended succesfully!")
+        edit_details_screen.destroy()
 
 
 """
@@ -600,15 +630,15 @@ Label(background_frame, image=background_image).place(relwidth=1, relheight=1)
 
 # Buttons
 register_button = Button(register_frame, text="Register", font=('Calibri', 12), width=20, bg='#659EDB',
-                         command=register)
+                         command=register, activebackground="#9EA3AB")
 register_button.place(relheight=1, relwidth=1)
-login_button = Button(login_frame, text="Login", font=('Calibri', 12), width=20, bg='#659EDB', command=login)
+login_button = Button(login_frame, text="Login", font=('Calibri', 12), width=20, bg='#659EDB', command=login
+                      , activebackground="#9EA3AB")
 login_button.place(relheight=1, relwidth=1)
 
 # Binding Buttons
 login_button.bind('<Enter>', on_enter)
 login_button.bind('<Leave>', on_leave)
-login_button.bind('')
 register_button.bind('<Enter>', on_enter)
 register_button.bind('<Leave>', on_leave)
 
