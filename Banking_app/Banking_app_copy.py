@@ -195,13 +195,13 @@ def login():
                                                                                        rely=0.5)
 
     # Button
-    login_button_1 = Button(Login_button_frame, text='Login', command=login_session, width=15, font=('Calibri', 12), bg='#659EDB')
+    login_button_1 = Button(Login_button_frame, text='Login', command=login_session, width=15, font=('Calibri', 12),
+                            bg='#659EDB')
     login_button_1.place(relwidth=1, relheight=1)
 
     # Binding Buttons
     login_button_1.bind('<Enter>', on_enter)
     login_button_1.bind('<Leave>', on_leave)
-
 
 
 def login_session():
@@ -225,7 +225,7 @@ def login_session():
                 # Creating Dashboard screen
                 account_dashboard = Toplevel(master)
                 account_dashboard.title("Dashboard")
-                account_dashboard.geometry("300x300")
+                account_dashboard.geometry("300x350")
 
                 # Frame
                 background_frame_dashboard = Frame(account_dashboard, bg='black')
@@ -242,18 +242,27 @@ def login_session():
                 # Labels
 
                 Label(background_frame_dashboard, image=background_image).place(relwidth=1, relheight=1)
-                Label(dashboard_heading_frame, text="ACCOUNT DASHBOARD", font=("Calibri", 12), bg='#659EDB').pack(fill=BOTH, expand=True)
-                Label(dashboard_subheading_frame, text="Welcome " + full_name, font=("Calibri", 12), bg='#659EDB').pack(fill=BOTH, expand=True)
+                Label(dashboard_heading_frame, text="ACCOUNT DASHBOARD", font=("Calibri", 12), bg='#659EDB').pack(
+                    fill=BOTH, expand=True)
+                Label(dashboard_subheading_frame, text="Welcome " + full_name, font=("Calibri", 12), bg='#659EDB').pack(
+                    fill=BOTH, expand=True)
+
                 # Establishing Buttons
-                personal_details_button = Button(dashboard_button_frame, text="Personal Details", font=("Calibri", 12), bg='#659EDB', width=30,
-                       command=personal_details)
-                deposit_button = Button(dashboard_button_frame, text="Deposit", font=("Calibri", 12), bg='#659EDB', width=30, command=deposit)
-                withdraw_button = Button(dashboard_button_frame, text="Withdraw", font=("Calibri", 12), bg='#659EDB', width=30, command=withdraw)
+                personal_details_button = Button(dashboard_button_frame, text="Personal Details", font=("Calibri", 12),
+                                                 bg='#659EDB', width=30,
+                                                 command=personal_details)
+                deposit_button = Button(dashboard_button_frame, text="Deposit", font=("Calibri", 12), bg='#659EDB',
+                                        width=30, command=deposit)
+                withdraw_button = Button(dashboard_button_frame, text="Withdraw", font=("Calibri", 12), bg='#659EDB',
+                                         width=30, command=withdraw)
+                pay_button = Button(dashboard_button_frame, text="Pay Beneficiary", font=("Calibri", 12), bg='#659EDB',
+                                    width=30, command=pay)
 
                 # Placing Buttons
                 personal_details_button.pack(fill=BOTH, expand=True)
                 deposit_button.pack(fill=BOTH, expand=True)
                 withdraw_button.pack(fill=BOTH, expand=True)
+                pay_button.pack(fill=BOTH, expand=True)
 
                 # Binding Buttons
                 personal_details_button.bind('<Enter>', on_enter)
@@ -265,11 +274,18 @@ def login_session():
                 withdraw_button.bind('<Enter>', on_enter)
                 withdraw_button.bind('<Leave>', on_leave)
 
+                pay_button.bind('<Enter>', on_enter)
+                pay_button.bind('<Leave>', on_leave)
+
                 return
             else:
                 messagebox.showerror("Error!", "Password Incorrect")
                 return
     messagebox.showerror("Error!", "No Account Found!")
+
+
+def pay():
+    pass
 
 
 def deposit():
@@ -401,28 +417,46 @@ def personal_details():
     # Personal Details screen
     personal_details_screen = Toplevel(master)
     personal_details_screen.title("Personal Details")
-    personal_details_screen.geometry("180x350")
+    personal_details_screen.geometry("250x350")
+
+    # Establishing Frame
+    personal_details_title = Frame(personal_details_screen, bg='black', bd=5)
+    personal_details_contents = Frame(personal_details_screen, bg='black', bd=2)
+    personal_details_background = Frame(personal_details_screen)
+    personal_details_button = Frame(personal_details_screen, bg='black', bd=2)
+
+    # Placing Frames
+    personal_details_background.place(relheight=1, relwidth=1)
+    personal_details_title.place(relx=0.5, rely=0.05, relwidth=0.6, relheight=0.1, anchor='n')
+    personal_details_contents.place(relx=0.5, rely=0.16, relwidth=0.7, relheight=0.7, anchor='n')
+    personal_details_button.place(relx=0.1, rely=0.8, relheight=0.1, relwidth=0.1)
+
+
+
     # Labels
-    Label(personal_details_screen, text="Personal Details", font=("Calibri", 14)).grid(row=0, sticky=W, pady=10)
+    Label(personal_details_background, image=background_image).place(relwidth=1, relheight=1)
 
-    Label(personal_details_screen, text="Username : " + login_username, font=("Calibri", 12)).grid(row=1, sticky=W,
-                                                                                                   pady=10)
+    Label(personal_details_title, text="Personal Details", font=("Calibri", 14)).pack(fill=BOTH, expand=True)
 
-    Label(personal_details_screen, text="Name : " + details_full_name, font=("Calibri", 12)).grid(row=2, sticky=W,
-                                                                                                  pady=10)
+    Label(personal_details_contents, text="Username : " + login_username, font=("Calibri", 12)).pack(fill=BOTH, expand=True)
 
-    Label(personal_details_screen, text="Age : " + details_age, font=("Calibri", 12)).grid(row=3, sticky=W,
-                                                                                           pady=10)
+    Label(personal_details_contents, text="Name : " + details_full_name, font=("Calibri", 12)).pack(fill=BOTH, expand=True)
 
-    Label(personal_details_screen, text="Gender : " + details_gender, font=("Calibri", 12)).grid(row=4, sticky=W,
-                                                                                                 pady=10)
+    Label(personal_details_contents, text="Age : " + details_age, font=("Calibri", 12)).pack(fill=BOTH, expand=True)
 
-    Label(personal_details_screen, text="Balance : R" + details_balance, font=("Calibri", 12)).grid(row=5, sticky=W,
-                                                                                                    pady=10)
-    # Edit Details Button
-    Button(personal_details_screen, text="Edit Profile", font=("Calibri", 12), command=edit_details).grid(row=6,
-                                                                                                          sticky=N,
-                                                                                                          pady=10)
+    Label(personal_details_contents, text="Gender : " + details_gender, font=("Calibri", 12)).pack(fill=BOTH, expand=True)
+
+    Label(personal_details_contents, text="Balance : R" + details_balance, font=("Calibri", 12)).pack(fill=BOTH, expand=True)
+
+    # Establishing Button
+    edit_details_button = Button(personal_details_button, text="Edit Profile", font=("Calibri", 12), command=edit_details)
+
+    # Placing Button
+    edit_details_button.pack(fill=BOTH, expand=True)
+
+    # Flashing buttons
+    edit_details_button.bind('<Enter>', on_enter)
+    edit_details_button.bind('<Leave>', on_leave)
 
 
 def edit_details():
@@ -574,6 +608,7 @@ login_button.place(relheight=1, relwidth=1)
 # Binding Buttons
 login_button.bind('<Enter>', on_enter)
 login_button.bind('<Leave>', on_leave)
+login_button.bind('')
 register_button.bind('<Enter>', on_enter)
 register_button.bind('<Leave>', on_leave)
 
