@@ -18,6 +18,14 @@ background_image = ImageTk.PhotoImage(background_image)
 
 
 # Creating Functions
+def on_enter(e):
+    e.widget['background'] = '#376AB4'
+
+
+def on_leave(e):
+    e.widget['background'] = '#659EDB'
+
+
 def temp_text_password(e):
     password_entry.delete(0, END)
 
@@ -28,7 +36,7 @@ def temp_text_username(e):
 
 def register():
     # Vars
-    global regiser_screen
+    global register_screen
     global temp_username
     global temp_password
     global temp_name
@@ -49,37 +57,59 @@ def register():
         register_screen = Toplevel(master)
         register_screen.title("Register")
         register_screen.transient(master)
+        register_screen.geometry("450x400")
+
+        # Frame
+        background_frame_register = Frame(register_screen, bg='black')
+        Register_title_frame = Frame(register_screen, bg='black', bd=2)
+        register_label_frame = Frame(register_screen, bg='black', bd=2)
+        register_entry_frame = Frame(register_screen, bg='black', bd=2)
+        register_button_frame = Frame(register_screen, bg='black', bd=2)
+
+        # Placing Frames
+        background_frame_register.place(relheight=1, relwidth=1)
+        Register_title_frame.place(relx=0.5, rely=0.05, relheight=0.1, relwidth=0.8, anchor='n')
+        register_label_frame.place(relx=0.1, rely=0.2, relheight=0.6, relwidth=0.3)
+        register_entry_frame.place(relx=0.45, rely=0.2, relheight=0.6, relwidth=0.5)
+        register_button_frame.place(relx=0.1, rely=0.82, relheight=0.1, relwidth=0.3)
 
         # Labels
-        Label(register_screen, text="Please enter your details below to register:", font=("Calibri", 14)).grid(row=0,
-                                                                                                               sticky=N,
-                                                                                                               pady=10)
-        Label(register_screen, text="Username:", font=("Calibri", 12)).grid(row=1, sticky=W)
-        Label(register_screen, text="Password:", font=("Calibri", 12)).grid(row=2, sticky=W)
-        Label(register_screen, text="Name:", font=("Calibri", 12)).grid(row=3, sticky=W)
-        Label(register_screen, text="Surname:", font=("Calibri", 12)).grid(row=4, sticky=W)
-        Label(register_screen, text="Age:", font=("Calibri", 12)).grid(row=5, sticky=W)
-        Label(register_screen, text="Gender:", font=("Calibri", 12)).grid(row=6, sticky=W)
-        notif = Label(register_screen, font=("Calibri", 12))
-        notif.grid(row=8, sticky=N, pady=10)
+        Label(background_frame_register, image=background_image).place(relwidth=1, relheight=1)
+        Label(Register_title_frame, text="Please enter your details below to register:", font=("Calibri", 13),
+              bg='#659EDB').place(relwidth=1, relheight=1)
+        Label(register_label_frame, text="Username:", font=("Calibri", 12), bg='#659EDB').pack(fill=BOTH, expand=True)
+        Label(register_label_frame, text="Password:", font=("Calibri", 12), bg='#659EDB').pack(fill=BOTH, expand=True)
+        Label(register_label_frame, text="Name:", font=("Calibri", 12), bg='#659EDB').pack(fill=BOTH, expand=True)
+        Label(register_label_frame, text="Surname:", font=("Calibri", 12), bg='#659EDB').pack(fill=BOTH, expand=True)
+        Label(register_label_frame, text="Age:", font=("Calibri", 12), bg='#659EDB').pack(fill=BOTH, expand=True)
+        Label(register_label_frame, text="Gender:", font=("Calibri", 12), bg='#659EDB').pack(fill=BOTH, expand=True)
+        notif = Label(register_label_frame, font=("Calibri", 12))
 
         # Entries
-        Entry(register_screen, textvariable=temp_username).grid(row=1, column=0)
-        Entry(register_screen, textvariable=temp_password, show='*').grid(row=2, column=0)
-        Entry(register_screen, textvariable=temp_name).grid(row=3, column=0)
-        Entry(register_screen, textvariable=temp_surname).grid(row=4, column=0)
-        Entry(register_screen, textvariable=temp_age).grid(row=5, column=0)
+        Entry(register_entry_frame, textvariable=temp_username, bg='#659EDB').pack(fill=BOTH, expand=True)
+        Entry(register_entry_frame, textvariable=temp_password, show='*', bg='#659EDB').pack(fill=BOTH, expand=True)
+        Entry(register_entry_frame, textvariable=temp_name, bg='#659EDB').pack(fill=BOTH, expand=True)
+        Entry(register_entry_frame, textvariable=temp_surname, bg='#659EDB').pack(fill=BOTH, expand=True)
+        Entry(register_entry_frame, textvariable=temp_age, bg='#659EDB').pack(fill=BOTH, expand=True)
 
         # Gender drop down menu
         options = ["Male", "Female", "Other"]
         temp_gender = StringVar()
         temp_gender.set(options[0])
-        gender_option = OptionMenu(register_screen, temp_gender, *options)
-        gender_option.grid(row=6, column=0)
+        gender_option = OptionMenu(register_entry_frame, temp_gender, *options)
+        gender_option.config(bg='#659EDB', fg="BLACK", activebackground='#376AB4', activeforeground="BLACK")
+        gender_option['menu'].config(bg='#659EDB', fg="BLACK", activebackground="#9EA3AB", activeforeground="black")
+        gender_option.pack(fill=BOTH)
 
         # Buttons
-        Button(register_screen, text="Register", command=finish_reg, font=("Calibri", 12)).grid(row=7, sticky=N,
-                                                                                                pady=10)
+        register_button_1 = Button(register_button_frame, text="Register", command=finish_reg, font=("Calibri", 12),
+                                   bg='#659EDB')
+        register_button_1.pack(fill=BOTH, expand=True)
+
+        # Binding Buttons
+        register_button_1.bind('<Enter>', on_enter)
+        register_button_1.bind('<Leave>', on_leave)
+
     else:
         master.destroy()
 
@@ -93,6 +123,7 @@ def finish_reg():
     age = temp_age.get()
     gender = temp_gender.get()
     all_accounts = os.listdir()
+    running = True
 
     if username == "" or password == "" or name == "" or surname == "" or age == "" or gender == "":
         messagebox.showerror("Error!", "All fields not filled in *")
@@ -101,17 +132,21 @@ def finish_reg():
         # Checking if account exists
     for name_check in all_accounts:
         if username == name_check:
-            notif.config(fg="red", text="Account already exists")
-            return
+            messagebox.showerror("Error!", "Account Already exists")
+            running = False
+            break
         else:
-            with open(username, "w") as f:
-                f.write(username + '\n')
-                f.write(password + '\n')
-                f.write(name + " " + surname + '\n')
-                f.write(age + '\n')
-                f.write(gender + '\n')
-                f.write('0')
-            notif.config(fg="green", text="Account has been created successfully!")
+            continue
+    if running == True:
+        with open(username, "w") as f:
+            f.write(username + '\n')
+            f.write(password + '\n')
+            f.write(name + " " + surname + '\n')
+            f.write(age + '\n')
+            f.write(gender + '\n')
+            f.write('0')
+
+        response = messagebox.showinfo('Success!', 'Successfully made Account!')
 
 
 def login():
@@ -132,34 +167,41 @@ def login():
     login_screen.transient(master)
 
     # Frame
-    background_frame_1 = Frame(login_screen, bg='black')
+    background_frame_login = Frame(login_screen, bg='black')
     Login_title_frame = Frame(login_screen, bg='black', bd=2)
     username_frame = Frame(login_screen, bg='black', bd=2)
+    password_frame = Frame(login_screen, bg='black', bd=2)
     entry_frame = Frame(login_screen, bg='black', bd=2)
     Login_button_frame = Frame(login_screen, bg='black', bd=2)
 
     # Place Frame
     Login_title_frame.place(relx=0.5, rely=0.05, relwidth=0.5, relheight=0.2, anchor='n')
-    background_frame_1.place(relheight=1, relwidth=1)
-    username_frame.place(relx=0.02, rely=0.32, relwidth=0.4, relheight=0.5)
+    background_frame_login.place(relheight=1, relwidth=1)
+    username_frame.place(relx=0.02, rely=0.32, relwidth=0.4, relheight=0.25)
+    password_frame.place(relx=0.02, rely=0.57, relwidth=0.4, relheight=0.25)
     entry_frame.place(relx=0.45, rely=0.32, relwidth=0.5, relheight=0.5)
     Login_button_frame.place(relx=0.02, rely=0.82, relheight=0.15, relwidth=0.4)
 
     # Labels
-    Label(background_frame_1, image=background_image).place(relwidth=1, relheight=1)
+    Label(background_frame_login, image=background_image).place(relwidth=1, relheight=1)
     Label(Login_title_frame, text="Login to your account:", font=('Calibri', 12), bg='#659EDB').place(relheight=1,
                                                                                                       relwidth=1)
-    Label(username_frame, text="Username:", font=('Calibri', 12), bg='#659EDB').place(relheight=0.5, relwidth=1)
-    Label(username_frame, text="Password:", font=('Calibri', 12), bg='#659EDB').place(relheight=0.5, relwidth=1, rely=0.5)
-    # login_notif = Label(login_screen, font=("Calibri", 12), bg='black')
-    # login_notif.place(relx=0.45, rely=0.92, relwidth=0.5, anchor='w')
+    Label(username_frame, text="Username:", font=('Calibri', 12), bg='#659EDB').place(relheight=1, relwidth=1)
+    Label(password_frame, text="Password:", font=('Calibri', 12), bg='#659EDB').place(relheight=1, relwidth=1)
 
     # Entry
     Entry(entry_frame, textvariable=temp_login_username, bg='#659EDB').place(relheight=0.5, relwidth=1)
-    Entry(entry_frame, textvariable=temp_login_password, show='*', bg='#659EDB').place(relheight=0.5, relwidth=1, rely=0.5)
+    Entry(entry_frame, textvariable=temp_login_password, show='*', bg='#659EDB').place(relheight=0.5, relwidth=1,
+                                                                                       rely=0.5)
 
     # Button
-    Button(Login_button_frame, text='Login', command=login_session, width=15, font=('Calibri', 12), bg='#659EDB').place(relwidth=1, relheight=1)
+    login_button_1 = Button(Login_button_frame, text='Login', command=login_session, width=15, font=('Calibri', 12), bg='#659EDB')
+    login_button_1.place(relwidth=1, relheight=1)
+
+    # Binding Buttons
+    login_button_1.bind('<Enter>', on_enter)
+    login_button_1.bind('<Leave>', on_leave)
+
 
 
 def login_session():
@@ -179,22 +221,50 @@ def login_session():
             # Account dashboard
             if login_password == password:
                 login_screen.destroy()
+
+                # Creating Dashboard screen
                 account_dashboard = Toplevel(master)
                 account_dashboard.title("Dashboard")
+                account_dashboard.geometry("300x300")
+
+                # Frame
+                background_frame_dashboard = Frame(account_dashboard, bg='black')
+                dashboard_heading_frame = Frame(account_dashboard, bg='black', bd=2)
+                dashboard_button_frame = Frame(account_dashboard, bg='black', bd=5)
+                dashboard_subheading_frame = Frame(account_dashboard, bg='black', bd=2)
+
+                # Placing Frames
+                background_frame_dashboard.place(relheight=1, relwidth=1)
+                dashboard_heading_frame.place(relx=0.5, rely=0.05, relwidth=0.6, relheight=0.1, anchor='n')
+                dashboard_subheading_frame.place(relx=0.5, rely=0.16, relheight=0.1, relwidth=0.7, anchor='n')
+                dashboard_button_frame.place(relx=0.5, rely=0.3, relwidth=0.8, relheight=0.6, anchor='n')
+
                 # Labels
-                Label(account_dashboard, text="ACCOUNT DASHBOARD", font=("Calibri", 12)).grid(row=0, sticky=N, pady=10)
-                Label(account_dashboard, text="Welcome " + full_name, font=("Calibri", 12)).grid(row=1, sticky=N,
-                                                                                                 pady=10)
-                # Buttons
-                Button(account_dashboard, text="Personal Details", font=("Calibri", 12), width=30,
-                       command=personal_details).grid(row=2, sticky=N, padx=10)
-                Button(account_dashboard, text="Deposit", font=("Calibri", 12), width=30, command=deposit).grid(row=3,
-                                                                                                                sticky=N,
-                                                                                                                padx=10)
-                Button(account_dashboard, text="Withdraw", font=("Calibri", 12), width=30, command=withdraw).grid(row=4,
-                                                                                                                  sticky=N,
-                                                                                                                  padx=10)
-                Label(account_dashboard).grid(row=5, sticky=N, pady=10)
+
+                Label(background_frame_dashboard, image=background_image).place(relwidth=1, relheight=1)
+                Label(dashboard_heading_frame, text="ACCOUNT DASHBOARD", font=("Calibri", 12), bg='#659EDB').pack(fill=BOTH, expand=True)
+                Label(dashboard_subheading_frame, text="Welcome " + full_name, font=("Calibri", 12), bg='#659EDB').pack(fill=BOTH, expand=True)
+                # Establishing Buttons
+                personal_details_button = Button(dashboard_button_frame, text="Personal Details", font=("Calibri", 12), bg='#659EDB', width=30,
+                       command=personal_details)
+                deposit_button = Button(dashboard_button_frame, text="Deposit", font=("Calibri", 12), bg='#659EDB', width=30, command=deposit)
+                withdraw_button = Button(dashboard_button_frame, text="Withdraw", font=("Calibri", 12), bg='#659EDB', width=30, command=withdraw)
+
+                # Placing Buttons
+                personal_details_button.pack(fill=BOTH, expand=True)
+                deposit_button.pack(fill=BOTH, expand=True)
+                withdraw_button.pack(fill=BOTH, expand=True)
+
+                # Binding Buttons
+                personal_details_button.bind('<Enter>', on_enter)
+                personal_details_button.bind('<Leave>', on_leave)
+
+                deposit_button.bind('<Enter>', on_enter)
+                deposit_button.bind('<Leave>', on_leave)
+
+                withdraw_button.bind('<Enter>', on_enter)
+                withdraw_button.bind('<Leave>', on_leave)
+
                 return
             else:
                 messagebox.showerror("Error!", "Password Incorrect")
@@ -464,9 +534,9 @@ def finish_edit_details():
         notif.config(fg="green", text="Account details appended succesfully!")
 
 
-
-
-
+"""
+Creating Main Screen
+"""
 # Frame
 background_frame = Frame(master)
 title_frame = Frame(master, bg='black', bd=2)
@@ -495,9 +565,17 @@ Label(pig_pic_frame, image=main_img, bg='#062C63').place(relwidth=1, relheight=1
 Label(background_frame, image=background_image).place(relwidth=1, relheight=1)
 
 # Buttons
-Button(register_frame, text="Register", font=('Calibri', 12), width=20, bg='#659EDB', command=register).place(
-    relheight=1, relwidth=1)
-Button(login_frame, text="Login", font=('Calibri', 12), width=20, bg='#659EDB', command=login).place(relheight=1,
-                                                                                                     relwidth=1)
+register_button = Button(register_frame, text="Register", font=('Calibri', 12), width=20, bg='#659EDB',
+                         command=register)
+register_button.place(relheight=1, relwidth=1)
+login_button = Button(login_frame, text="Login", font=('Calibri', 12), width=20, bg='#659EDB', command=login)
+login_button.place(relheight=1, relwidth=1)
 
+# Binding Buttons
+login_button.bind('<Enter>', on_enter)
+login_button.bind('<Leave>', on_leave)
+register_button.bind('<Enter>', on_enter)
+register_button.bind('<Leave>', on_leave)
+
+# Running Mainloop
 master.mainloop()
