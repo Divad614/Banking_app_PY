@@ -2,6 +2,7 @@ from tkinter import *
 import os
 from PIL import ImageTk, Image
 from tkinter import messagebox
+import random
 
 # Main Screen
 master = Tk()
@@ -9,12 +10,20 @@ master.title('David\'s Banking App')
 master.geometry("400x500")
 master.resizable(False, False)
 
+# Vars
+options_beneficiary = {"": ""}
+
 # Image import
 main_img = Image.open('Images/Pig_Pic.png')
 main_img = ImageTk.PhotoImage(main_img)
 
+# Background Image import
 background_image = Image.open('Images/Digital-Transformation-in-Banking-Cover.jpg')
 background_image = ImageTk.PhotoImage(background_image)
+
+# Changing Directory to store Accounts in the Account directory
+os.chdir(r"C:\Users\David\PycharmProjects\Banking_app_copy\Banking_app\Accounts")
+
 
 
 # Creating Functions
@@ -26,12 +35,8 @@ def on_leave(e):
     e.widget['background'] = '#659EDB'
 
 
-def temp_text_password(e):
-    password_entry.delete(0, END)
-
-
-def temp_text_username(e):
-    username_entry.delete(0, END)
+def delete_temp_text(e):
+    e.widget.delete(0, END)
 
 
 def register():
@@ -128,6 +133,7 @@ def finish_reg():
     age = temp_age.get()
     gender = temp_gender.get()
     all_accounts = os.listdir()
+    Account_number = random.randrange(10000000, 99999999, 1)
     running = True
 
     if username == "" or password == "" or name == "" or surname == "" or age == "" or gender == "":
@@ -149,6 +155,7 @@ def finish_reg():
             f.write(name + " " + surname + '\n')
             f.write(age + '\n')
             f.write(gender + '\n')
+            f.write(str(Account_number) + '\n')
             f.write('0')
 
         response = messagebox.showinfo('Success!', 'Successfully made Account!')
@@ -299,7 +306,248 @@ def login_session():
 
 
 def pay():
-    pass
+    global options_beneficiary
+    global beneficiary
+    global pay_amount
+    global create_beneficiary_button
+    global pay_beneficiary_button
+    global pay_screen
+
+    # Vars
+    beneficiary = StringVar()
+    pay_amount = StringVar()
+
+    # Screen
+    pay_screen = Toplevel(master)
+    pay_screen.title("Pay")
+    pay_screen.geometry("350x200")
+    pay_screen.resizable(False, False)
+    pay_screen.transient(master)
+
+    # Frame
+    background_frame_pay = Frame(pay_screen, bg='black')
+    pay_title_frame = Frame(pay_screen, bg='black', bd=2)
+    label_pay_frame = Frame(pay_screen, bg='black', bd=2)
+    entry_pay_frame = Frame(pay_screen, bg='black', bd=2)
+    option_pay_frame = Frame(pay_screen, bg='black', bd=2)
+    button_pay_frame = Frame(pay_screen, bg='black', bd=2)
+    button_beneficiary_frame = Frame(pay_screen, bg='black', bd=2)
+
+    # Placing Frames
+    background_frame_pay.place(relheight=1, relwidth=1)
+    pay_title_frame.place(relx=0.5, rely=0.05, relwidth=0.4, relheight=0.13, anchor='n')
+    label_pay_frame.place(relx=0.05, rely=0.2, relwidth=0.5, relheight=0.62)
+    option_pay_frame.place(relx=0.6, rely=0.2, relwidth=0.35, relheight=0.3)
+    entry_pay_frame.place(relx=0.6, rely=0.52, relwidth=0.35, relheight=0.3)
+    button_pay_frame.place(relx=0.05, rely=0.84, relheight=0.15, relwidth=0.25)
+    button_beneficiary_frame.place(relx=0.6, rely=0.84, relheight=0.15, relwidth=0.35)
+
+    # Labels
+    Label(background_frame_pay, image=background_image).place(relwidth=1, relheight=1)
+    Label(pay_title_frame, text="Payment", bg='#659EDB', font=('Calibri', 14)).place(relheight=1, relwidth=1)
+    Label(label_pay_frame, text="Select Beneficiary", bg='#659EDB', font=('Calibri', 12)).pack(fill=BOTH, expand=True)
+    Label(label_pay_frame, text="Enter Amount", bg='#659EDB', font=('Calibri', 12)).pack(fill=BOTH, expand=True)
+
+    # Entry Screen
+    Entry(entry_pay_frame, textvariable=pay_amount, bg='#659EDB').pack(fill=BOTH, expand=True)
+
+    # Button
+    pay_beneficiary_button = Button(button_pay_frame, text='Pay', bg='#659EDB', font=('Calibri', 12),
+                                    command=finish_pay)
+
+    create_beneficiary_button1 = Button(button_beneficiary_frame, text='Create Beneficiary', bg='#659EDB',
+                                        font=('Calibri', 10), command=create_beneficiary)
+
+    # Placing Buttons
+    create_beneficiary_button1.pack(fill=BOTH, expand=True)
+    pay_beneficiary_button.pack(fill=BOTH, expand=True)
+
+    # Button Hovering
+    create_beneficiary_button1.bind('<Enter>', on_enter)
+    create_beneficiary_button1.bind('<Leave>', on_leave)
+
+    pay_beneficiary_button.bind('<Enter>', on_enter)
+    pay_beneficiary_button.bind('<Leave>', on_leave)
+
+    # Option menu
+    try:
+        beneficiary.set(list(options_beneficiary)[0])
+        beneficiary_option = OptionMenu(option_pay_frame, beneficiary, *options_beneficiary)
+        beneficiary_option.config(bg='#659EDB', fg="BLACK", activebackground='#376AB4', activeforeground="BLACK")
+        beneficiary_option['menu'].config(bg='#659EDB', fg="BLACK", activebackground="#9EA3AB",
+                                          activeforeground="black")
+        beneficiary_option.pack(fill=BOTH, expand=True)
+    except TypeError:
+        pass
+    except IndexError:
+        pass
+
+
+def finish_pay():
+    pay_final = pay_amount.get()
+    beneficiary_final = beneficiary.get()
+
+    if beneficiary_final == "":
+        messagebox.showerror("Error!", "Please select a beneficiary")
+        return
+
+    elif pay_final == "":
+        messagebox.showerror("Error!", "Please fill in all fields!")
+        return
+
+    elif float(pay_final) <= 0:
+        messagebox.showerror("Error!", "Negative Currency is not accepted")
+        return
+
+    else:
+        beneficiary_username = options_beneficiary[beneficiary.get()]
+        beneficiary_username = beneficiary_username.replace("\n", "")
+
+        with open(beneficiary_username, "r") as f:
+            file_data_beneficiary = f.readlines()
+
+        with open(login_username, "r") as f:
+            file_data_user = f.readlines()
+
+        if float(pay_final) > float(file_data_user[6]):
+            messagebox.showerror("Error!", "Insufficient Funds!")
+            return
+        else:
+            file_data_user[6] = str(float(file_data_user[6]) - float(pay_final))
+            file_data_beneficiary[6] = str(float(file_data_beneficiary[6]) + float(pay_final))
+
+
+            with open(beneficiary_username, "w") as f:
+                f.writelines(file_data_beneficiary)
+
+            with open(login_username, "w") as f:
+                f.writelines(file_data_user)
+
+            messagebox.showinfo("Success!", "Beneficiary Payed!")
+
+
+def create_beneficiary():
+    global beneficiary_account_number
+    global beneficiary_name
+    global create_beneficiary_button
+    global create_beneficiary_screen
+
+    # Vars
+    beneficiary_name = StringVar()
+    beneficiary_account_number = StringVar()
+
+    # Create screen
+    create_beneficiary_screen = Toplevel(master)
+    create_beneficiary_screen.title("Create Beneficiary")
+    create_beneficiary_screen.geometry("350x200")
+    create_beneficiary_screen.resizable(False, False)
+    create_beneficiary_screen.transient(master)
+
+    # Creating Frames
+    background_frame_beneficiary = Frame(create_beneficiary_screen, bg='black')
+    beneficiary_title_frame = Frame(create_beneficiary_screen, bg='black', bd=2)
+    label_beneficiary_frame = Frame(create_beneficiary_screen, bg='black', bd=2)
+    entry_beneficiary_frame = Frame(create_beneficiary_screen, bg='black', bd=2)
+    button_beneficiary_frame = Frame(create_beneficiary_screen, bg='black', bd=2)
+
+    # Placing Frames
+    background_frame_beneficiary.place(relheight=1, relwidth=1)
+    beneficiary_title_frame.place(relx=0.5, rely=0.05, relwidth=0.4, relheight=0.13, anchor='n')
+    label_beneficiary_frame.place(relx=0.02, rely=0.2, relwidth=0.5, relheight=0.6)
+    entry_beneficiary_frame.place(relx=0.55, rely=0.2, relwidth=0.38, relheight=0.6)
+    button_beneficiary_frame.place(relx=0.02, rely=0.8, relwidth=0.4, relheight=0.23)
+
+    # Label
+    Label(background_frame_beneficiary, image=background_image).place(relwidth=1, relheight=1)
+    Label(beneficiary_title_frame, text="Create Beneficiary", bg='#659EDB', font=('Calibri', 12)).place(relheight=1,
+                                                                                                        relwidth=1)
+    Label(label_beneficiary_frame, text="Enter Beneficiary Full Name:", bg='#659EDB', font=('Calibri', 10)).pack(
+        fill=BOTH, expand=True)
+    Label(label_beneficiary_frame, text="Enter Account Number:", bg='#659EDB', font=('Calibri', 10)).pack(fill=BOTH,
+                                                                                                          expand=True)
+    # Button
+    create_beneficiary_button2 = Button(button_beneficiary_frame, text='Add Beneficiary',
+                                        command=finish_create_beneficiary, font=('Calibri', 12), bg='#659EDB')
+
+    # Placing Button
+    create_beneficiary_button2.pack(fill=BOTH, expand=True)
+
+    # Button Hovering
+    create_beneficiary_button2.bind('<Enter>', on_enter)
+    create_beneficiary_button2.bind('<Leave>', on_leave)
+
+    # Entries
+    beneficiary_name_entry = Entry(entry_beneficiary_frame, textvariable=beneficiary_name, width=25, bg='#659EDB')
+    account_number_entry = Entry(entry_beneficiary_frame, textvariable=beneficiary_account_number, width=25,
+                                 bg='#659EDB')
+
+    # Placing Entries
+    beneficiary_name_entry.pack(fill=BOTH, expand=True)
+    account_number_entry.pack(fill=BOTH, expand=True)
+
+    # Insert into entries
+    beneficiary_name_entry.insert(END, "Enter Name:", )
+    account_number_entry.insert(END, "Enter Account number:")
+
+    # Deletes existing text
+    beneficiary_name_entry.bind("<FocusIn>", delete_temp_text)
+    account_number_entry.bind("<FocusIn>", delete_temp_text)
+
+
+def finish_create_beneficiary():
+    global options_beneficiary
+    global username_beneficiary
+    all_accounts = os.listdir()
+    name = str(beneficiary_name.get())
+    account_number = str(beneficiary_account_number.get())
+    exist = False
+
+    # Opening File
+    if name == "" or account_number == "":
+        messagebox.showerror("Error!", "All fields required *")
+        return
+
+    elif name == "Enter Name:" or account_number == "Enter Account Number:":
+        messagebox.showerror("Error!", "Click the entry screen!")
+        return
+
+    else:
+        for name_check in all_accounts:
+            with open(login_username, "r") as f:
+                file_data = f.read()
+                user_details = file_data.split('\n')
+                user_account_num = user_details[5]
+
+            with open(name_check, "r") as f:
+                file_data = f.readlines()
+            if file_data[2] == name + '\n' and file_data[5] == account_number + '\n':
+
+                username_beneficiary = file_data[0]
+                # Checking if Empty Key pair exists
+                if "" in options_beneficiary.keys():
+                    del options_beneficiary[""]
+
+                if user_account_num == account_number:
+                    messagebox.showerror("Error!", "Can't save yourself as a Beneficiary")
+                    return
+
+                # Checking if beneficiary is already saved
+                elif name in options_beneficiary.keys():
+                    messagebox.showerror("Error!", "Beneficiary already saved")
+                    return
+
+
+                options_beneficiary.update({name: username_beneficiary})
+                messagebox.showinfo("Success", "Saved Account number")
+                pay_screen.destroy()
+                create_beneficiary_screen.destroy()
+                exist = True
+                break
+            else:
+                continue
+
+    if not exist:
+        messagebox.showerror("Error!", "No Account exists!")
 
 
 def deposit():
@@ -314,7 +562,7 @@ def deposit():
     file = open(login_username, "r")
     file_data = file.read()
     user_details = file_data.split('\n')
-    details_balance = user_details[5]
+    details_balance = user_details[6]
 
     # Deposit Screen
     deposit_screen = Toplevel(master)
@@ -344,7 +592,7 @@ def finish_deposit():
     file = open(login_username, 'r+')
     file_data = file.read()
     details = file_data.split('\n')
-    current_balance = details[5]
+    current_balance = details[6]
     updated_balance = float(current_balance) + float(amount.get())
     file_data = file_data.replace(current_balance, str(updated_balance))
     file.seek(0)
@@ -367,7 +615,7 @@ def withdraw():
     file = open(login_username, "r")
     file_data = file.read()
     user_details = file_data.split('\n')
-    details_balance = user_details[5]
+    details_balance = user_details[6]
 
     # Withdraw Screen
     withdraw_screen = Toplevel(master)
@@ -398,7 +646,7 @@ def finish_withdraw():
     file = open(login_username, 'r+')
     file_data = file.read()
     details = file_data.split('\n')
-    current_balance = details[5]
+    current_balance = details[6]
 
     if float(withdraw_amount.get()) > float(current_balance):
         withdraw_notif.config(text='Insufficient Funds!', fg='red')
@@ -418,6 +666,7 @@ def finish_withdraw():
 def personal_details():
     global personal_details_screen
     global login_username
+    global details_account_number
     # Vars
     file = open(login_username, 'r')
     file_data = file.read()
@@ -426,7 +675,8 @@ def personal_details():
     details_full_name = user_details[2]
     details_age = user_details[3]
     details_gender = user_details[4]
-    details_balance = user_details[5]
+    details_account_number = user_details[5]
+    details_balance = user_details[6]
 
     # Personal Details screen
     personal_details_screen = Toplevel(master)
@@ -442,7 +692,7 @@ def personal_details():
     # Placing Frames
     personal_details_background.place(relheight=1, relwidth=1)
     personal_details_title.place(relx=0.5, rely=0.05, relwidth=0.6, relheight=0.1, anchor='n')
-    personal_details_contents.place(relx=0.5, rely=0.16, relwidth=0.7, relheight=0.7, anchor='n')
+    personal_details_contents.place(relx=0.5, rely=0.16, relwidth=0.8, relheight=0.7, anchor='n')
     personal_details_button.place(relx=0.5, rely=0.88, relheight=0.1, relwidth=0.4, anchor='n')
 
     # Labels
@@ -450,6 +700,10 @@ def personal_details():
 
     Label(personal_details_title, text="Personal Details", font=("Calibri", 14), bg='#659EDB').pack(fill=BOTH,
                                                                                                     expand=True)
+
+    Label(personal_details_contents, text="Account Number : " + details_account_number, font=("Calibri", 12),
+          bg='#659EDB').pack(
+        fill=BOTH, expand=True)
 
     Label(personal_details_contents, text="Username : " + login_username, font=("Calibri", 12), bg='#659EDB').pack(
         fill=BOTH, expand=True)
@@ -545,8 +799,8 @@ def edit_details():
     password_entry.insert(END, "Enter new Password here:")
 
     # Deletes existing text
-    username_entry.bind("<FocusIn>", temp_text_username)
-    password_entry.bind("<FocusIn>", temp_text_password)
+    username_entry.bind("<FocusIn>", delete_temp_text)
+    password_entry.bind("<FocusIn>", delete_temp_text)
 
     # Button
     Button(button_frame_edit_details, text='Save', command=finish_edit_details, activebackground="#9EA3AB",
@@ -571,8 +825,7 @@ def finish_edit_details():
 
     else:
         for name_check in all_accounts:
-            print(all_accounts)
-            print(new_username.get())
+
             if new_username.get() == name_check:
                 # print(name_check)
                 messagebox.showerror("Error!", "Username already taken")
