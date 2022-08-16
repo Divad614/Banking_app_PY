@@ -25,7 +25,6 @@ background_image = ImageTk.PhotoImage(background_image)
 os.chdir(r"C:\Users\David\PycharmProjects\Banking_app_copy\Banking_app\Accounts")
 
 
-
 # Creating Functions
 def on_enter(e):
     e.widget['background'] = '#376AB4'
@@ -353,10 +352,10 @@ def pay():
 
     # Button
     pay_beneficiary_button = Button(button_pay_frame, text='Pay', bg='#659EDB', font=('Calibri', 12),
-                                    command=finish_pay)
+                                    command=finish_pay, activebackground="#9EA3AB")
 
     create_beneficiary_button1 = Button(button_beneficiary_frame, text='Create Beneficiary', bg='#659EDB',
-                                        font=('Calibri', 10), command=create_beneficiary)
+                                        font=('Calibri', 10), command=create_beneficiary, activebackground="#9EA3AB")
 
     # Placing Buttons
     create_beneficiary_button1.pack(fill=BOTH, expand=True)
@@ -416,7 +415,6 @@ def finish_pay():
             file_data_user[6] = str(float(file_data_user[6]) - float(pay_final))
             file_data_beneficiary[6] = str(float(file_data_beneficiary[6]) + float(pay_final))
 
-
             with open(beneficiary_username, "w") as f:
                 f.writelines(file_data_beneficiary)
 
@@ -467,7 +465,7 @@ def create_beneficiary():
                                                                                                           expand=True)
     # Button
     create_beneficiary_button2 = Button(button_beneficiary_frame, text='Add Beneficiary',
-                                        command=finish_create_beneficiary, font=('Calibri', 12), bg='#659EDB')
+                                        command=finish_create_beneficiary, font=('Calibri', 12), bg='#659EDB', activebackground="#9EA3AB")
 
     # Placing Button
     create_beneficiary_button2.pack(fill=BOTH, expand=True)
@@ -536,7 +534,6 @@ def finish_create_beneficiary():
                     messagebox.showerror("Error!", "Beneficiary already saved")
                     return
 
-
                 options_beneficiary.update({name: username_beneficiary})
                 messagebox.showinfo("Success", "Saved Account number")
                 pay_screen.destroy()
@@ -567,28 +564,55 @@ def deposit():
     # Deposit Screen
     deposit_screen = Toplevel(master)
     deposit_screen.title("Deposit")
+    deposit_screen.geometry("300x200")
+    deposit_screen.resizable(False, False)
+    deposit_screen.transient(master)
+
+    # Frames
+    background_frame_deposit = Frame(deposit_screen)
+    title_frame_deposit = Frame(deposit_screen, bg='black', bd=2)
+    entry_frame_deposit = Frame(deposit_screen, bg='black', bd=2)
+    subtitle_frame_deposit = Frame(deposit_screen, bg='black', bd=2)
+    button_frame_deposit = Frame(deposit_screen, bg='black', bd=2)
+
+    # Placing Frames
+    background_frame_deposit.place(relheight=1, relwidth=1)
+    title_frame_deposit.place(relx=0.5, rely=0.05, relwidth=0.4, relheight=0.15, anchor='n')
+    subtitle_frame_deposit.place(relx=0.5, rely=0.22, relwidth=0.8, relheight=0.1, anchor='n')
+    entry_frame_deposit.place(relx=0.05, rely=0.4, relwidth=0.9, relheight=0.3)
+    button_frame_deposit.place(relx=0.05, rely=0.75, relwidth=0.3, relheight=0.15)
+
     # Labels
-    Label(deposit_screen, text="Deposit", font=("Calibri", 12)).grid(row=0, sticky=N, pady=10)
-    current_balance_label = Label(deposit_screen, text="Current Balance: R" + details_balance, font=("Calibri", 12))
-    current_balance_label.grid(row=1, sticky=N, pady=10)
-    Label(deposit_screen, text="Amount : ", font=("Calibri", 12)).grid(row=2, sticky=W)
-    deposit_notif = Label(deposit_screen, font=("Calibri", 12))
-    deposit_notif.grid(row=4, sticky=N, pady=5)
+    Label(background_frame_deposit, image=background_image).place(relwidth=1, relheight=1)
+    Label(title_frame_deposit, text="Deposit", font=("Calibri", 12), bg='#659EDB').pack(fill=BOTH, expand=True)
+    current_balance_label = Label(subtitle_frame_deposit, text="Current Balance: R" + details_balance,
+                                  font=("Calibri", 12), bg='#659EDB')
+    current_balance_label.pack(fill=BOTH, expand=True)
+    Label(entry_frame_deposit, text="Amount : ", font=("Calibri", 12), bg='#659EDB').pack(fill=BOTH, expand=True,
+                                                                                          side=LEFT)
 
     # Entry
-    Entry(deposit_screen, textvariable=amount).grid(row=2, column=1)
+    Entry(entry_frame_deposit, textvariable=amount, bg='#659EDB').pack(fill=BOTH, expand=True)
 
     # Button
-    Button(deposit_screen, text="Finish", font=("Calibri", 12), command=finish_deposit).grid(row=3, sticky=W, pady=5)
+    deposit_button = Button(button_frame_deposit, text="Finish", font=("Calibri", 12), bg='#659EDB',
+                            command=finish_deposit, activebackground="#9EA3AB")
+    deposit_button.pack(fill=BOTH, expand=True)
+
+    # Binding Buttons
+    deposit_button.bind('<Enter>', on_enter)
+    deposit_button.bind('<Leave>', on_leave)
 
 
 def finish_deposit():
     if amount.get() == "":
-        deposit_notif.config(fg="red", text='Amount is Required')
+        messagebox.showerror("Error!", "Amount is Required!")
         return
     if float(amount.get()) <= 0:
-        deposit_notif.config(text="Negative Currency is not accepted", fg='red')
+        messagebox.showerror("Error!", "Negative Currency is not accepted")
         return
+
+    # Opening File
     file = open(login_username, 'r+')
     file_data = file.read()
     details = file_data.split('\n')
@@ -600,7 +624,7 @@ def finish_deposit():
     file.close()
 
     current_balance_label.config(text="Current Balance : R " + str(updated_balance), fg="green")
-    deposit_notif.config(text='Balance Updated', fg='green')
+    messagebox.showinfo("Success!", "Balance Updated")
 
 
 def withdraw():
@@ -617,50 +641,77 @@ def withdraw():
     user_details = file_data.split('\n')
     details_balance = user_details[6]
 
-    # Withdraw Screen
+    # Deposit Screen
     withdraw_screen = Toplevel(master)
-    withdraw_screen.title("Withdraw")
+    withdraw_screen.title("Deposit")
+    withdraw_screen.geometry("300x200")
+    withdraw_screen.resizable(False, False)
+    withdraw_screen.transient(master)
+
+    # Frames
+    background_frame_withdraw = Frame(withdraw_screen)
+    title_frame_withdraw = Frame(withdraw_screen, bg='black', bd=2)
+    entry_frame_withdraw = Frame(withdraw_screen, bg='black', bd=2)
+    subtitle_frame_withdraw = Frame(withdraw_screen, bg='black', bd=2)
+    button_frame_withdraw = Frame(withdraw_screen, bg='black', bd=2)
+
+    # Placing Frames
+    background_frame_withdraw.place(relheight=1, relwidth=1)
+    title_frame_withdraw.place(relx=0.5, rely=0.05, relwidth=0.4, relheight=0.15, anchor='n')
+    subtitle_frame_withdraw.place(relx=0.5, rely=0.22, relwidth=0.8, relheight=0.1, anchor='n')
+    entry_frame_withdraw.place(relx=0.05, rely=0.4, relwidth=0.9, relheight=0.3)
+    button_frame_withdraw.place(relx=0.05, rely=0.75, relwidth=0.3, relheight=0.15)
 
     # Labels
-    Label(withdraw_screen, text="Withdraw", font=("Calibri", 12)).grid(row=0, sticky=N, pady=10)
-    current_balance_label = Label(withdraw_screen, text="Current Balance: R" + details_balance, font=("Calibri", 12))
-    current_balance_label.grid(row=1, sticky=N, pady=10)
-    Label(withdraw_screen, text="Amount : ", font=("Calibri", 12)).grid(row=2, sticky=W)
-    withdraw_notif = Label(withdraw_screen, font=("Calibri", 12))
-    withdraw_notif.grid(row=4, sticky=N, pady=5)
+    Label(background_frame_withdraw, image=background_image).place(relwidth=1, relheight=1)
+    Label(title_frame_withdraw, text="Withdraw", font=("Calibri", 12), bg='#659EDB').pack(fill=BOTH, expand=True)
+    current_balance_label = Label(subtitle_frame_withdraw, text="Current Balance: R" + details_balance,
+                                  font=("Calibri", 12), bg='#659EDB')
+    current_balance_label.pack(fill=BOTH, expand=True)
+    Label(entry_frame_withdraw, text="Amount : ", font=("Calibri", 12), bg='#659EDB').pack(fill=BOTH, expand=True,
+                                                                                           side=LEFT)
 
     # Entry
-    Entry(withdraw_screen, textvariable=withdraw_amount).grid(row=2, column=1)
+    Entry(entry_frame_withdraw, bg='#659EDB', textvariable=withdraw_amount).pack(fill=BOTH, expand=True)
 
     # Button
-    Button(withdraw_screen, text="Finish", font=("Calibri", 12), command=finish_withdraw).grid(row=3, sticky=W, pady=5)
+    withdraw_button = Button(button_frame_withdraw, text="Finish", font=("Calibri", 12), activebackground="#9EA3AB", bg='#659EDB',
+                             command=finish_withdraw)
+    withdraw_button.pack(fill=BOTH, expand=True)
+
+    # Binding Buttons
+    withdraw_button.bind('<Enter>', on_enter)
+    withdraw_button.bind('<Leave>', on_leave)
 
 
 def finish_withdraw():
-    if withdraw_amount.get() == "":
-        withdraw_notif.config(fg="red", text='Amount is Required')
-        return
-    if float(withdraw_amount.get()) <= 0:
-        withdraw_notif.config(text="Negative Currency is not accepted", fg='red')
-        return
+    # Opening File
     file = open(login_username, 'r+')
     file_data = file.read()
     details = file_data.split('\n')
     current_balance = details[6]
 
-    if float(withdraw_amount.get()) > float(current_balance):
-        withdraw_notif.config(text='Insufficient Funds!', fg='red')
+    if withdraw_amount.get() == "":
+        messagebox.showerror("Error!", 'Amount is Required!')
         return
 
+    if float(withdraw_amount.get()) <= 0:
+        messagebox.showerror("Error!", "Negative Currency is not accepted")
+        return
+
+    if float(withdraw_amount.get()) > float(current_balance):
+        messagebox.showerror("Error!", 'Insufficient Funds!')
+        return
+
+    # Updating File
     updated_balance = float(current_balance) - float(withdraw_amount.get())
     file_data = file_data.replace(current_balance, str(updated_balance))
     file.seek(0)
-    file.truncate(0)
     file.write(file_data)
     file.close()
 
     current_balance_label.config(text="Current Balance : R " + str(updated_balance), fg="green")
-    withdraw_notif.config(text='Balance Updated', fg='green')
+    messagebox.showinfo("Success", "Balance Updated")
 
 
 def personal_details():
@@ -682,6 +733,7 @@ def personal_details():
     personal_details_screen = Toplevel(master)
     personal_details_screen.title("Personal Details")
     personal_details_screen.geometry("250x350")
+    personal_details_screen.resizable(False, False)
 
     # Establishing Frame
     personal_details_background = Frame(personal_details_screen)
