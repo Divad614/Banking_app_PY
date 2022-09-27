@@ -1,4 +1,4 @@
-This is a simple banking app created on tkinter library of Python.
+This is a simple banking app created entirely by me using the tkinter library of Python.
 
 Features:
 
