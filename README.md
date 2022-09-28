@@ -35,7 +35,7 @@ This is a simple and intuative banking app created entirely by me using the tkin
 
 ### 4. Paying and Withdrawing funds from your account.
 
-![](Banking_app/Images/carbon%20(1).png)
+![](Banking_app/Images/Pay_and_Withdraw.png)
 
 
 ## Contributions
