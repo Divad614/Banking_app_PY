@@ -6,7 +6,11 @@ This is a simple and intuative banking app created entirely by me using the tkin
 ## Installation
 1. Install the latest version of python from https://www.python.org/downloads/
 2. Simply clone the repository to your local machine.
-3. Make sure to download and import the required libraries
+3. Make sure to download and import the required libraries.
+
+![](Banking_app/Images/Import_Libraries.png)
+
+
 
 
 ## Features:
