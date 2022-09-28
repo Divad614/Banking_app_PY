@@ -922,8 +922,6 @@ register_frame.place(relx=0.5, rely=0.7, relwidth=0.5, relheight=0.1, anchor='n'
 login_frame.place(relx=0.5, rely=0.81, relwidth=0.5, relheight=0.1, anchor='n')
 pig_pic_frame.place(relx=0.5, rely=0.2, relwidth=0.5, relheight=0.4, anchor='n')
 
-# Transparent Background
-
 
 # Labels
 Label(title_frame, text="Lothian Trust Banking Beta", font=('Calibri', 14, 'bold'), bg='#659EDB').place(relwidth=1,
